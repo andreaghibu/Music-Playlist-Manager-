@@ -1,0 +1,8 @@
+Python este un limbaj versatil.
+Java este popular în dezvoltarea enterprise.
+Python este folosit în știința datelor.
+Python este ușor de învățat.
+Fisierul filtered.txt va contine:
+Python este un limbaj versatil.
+Python este folosit în știința datelor.
+Python este ușor de învățat.
