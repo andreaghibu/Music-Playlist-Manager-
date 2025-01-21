@@ -10,5 +10,6 @@ def main():
         print(f"'{text}' este un palindrom!")
     else:
         print(f"'{text}' nu este un palindrom.")
+
 if __name__ == "__main__":
     main()
