@@ -94,7 +94,7 @@ class MusicPlaylistApp:
             except ValueError:
                 messagebox.showerror("Invalid Input", "Duration must be a number.")
         else:
-            messagebox.showerror("Missing Information", " Formatul acceptat este 3.20.")
+            messagebox.showerror("Missing Information", " Duration has to be 3.20.")
 
     def remove_song(self):
         if self.selected_song:
