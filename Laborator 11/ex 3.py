@@ -3,7 +3,6 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-# Generare dataset (folosind codul anterior, fără a-l afișa din nou)
 np.random.seed(42)
 
 num_days = 60
@@ -35,9 +34,6 @@ for day in range(1, num_days + 1):
 columns = ["Zi", "Produs", "Pret Original", "Pret Final", "Cantitate", "Total Vanzari", "Profit", "Promotie"]
 df_sales = pd.DataFrame(data, columns=columns)
 
-# -----------------------------
-# Evolutia veniturilor si profitului pe zile
-# -----------------------------
 daily_totals = df_sales.groupby("Zi")[["Total Vanzari", "Profit"]].sum().reset_index()
 
 plt.figure(figsize=(14, 6))
@@ -50,19 +46,14 @@ plt.legend()
 plt.grid()
 plt.show()
 
-# -----------------------------
-# Distributia preturilor si cantitatilor vandute
-# -----------------------------
 plt.figure(figsize=(14, 6))
 
-# Distribuția prețurilor
 plt.subplot(1, 2, 1)
 sns.histplot(df_sales["Pret Final"], bins=20, kde=True, color="blue")
 plt.title("Distribuția prețurilor finale", fontsize=14)
 plt.xlabel("Preț Final (RON)", fontsize=12)
 plt.ylabel("Frecvență", fontsize=12)
 
-# Distribuția cantităților
 plt.subplot(1, 2, 2)
 sns.histplot(df_sales["Cantitate"], bins=10, kde=True, color="green")
 plt.title("Distribuția cantităților vândute", fontsize=14)
@@ -72,13 +63,9 @@ plt.ylabel("Frecvență", fontsize=12)
 plt.tight_layout()
 plt.show()
 
-# -----------------------------
-# Vizualizarea promotiilor
-# -----------------------------
 promotions = df_sales[df_sales["Promotie"]]
 no_promotions = df_sales[~df_sales["Promotie"]]
 
-# Calcul impact promovare
 avg_price_promotion = promotions["Pret Final"].mean()
 avg_price_no_promotion = no_promotions["Pret Final"].mean()
 

@@ -1,67 +1,82 @@
 import numpy as np
 import pandas as pd
 
-# Set a random seed for reproducibility
 np.random.seed(42)
 
-# Parameters
 num_days = 60
-min_products = 5
-max_products = 15
-average_price = 40
-std_dev_price = 8
-min_quantity = 1
-max_quantity = 10
-promotion_probability = 0.3
-promotion_discount = 0.2
-profit_margin = 0.3
+produs_min = 5
+produs_max = 15
+pret_medie = 40
+deviatie_standard = 8
+cantitate_min = 1
+cantitate_max = 10
+probabilitate_promotie = 0.3
+reducere_promotie = 0.2
+marja_profit = 0.3
 
-# Generate dataset
-data = []
-for day in range(1, num_days + 1):
-    num_products = np.random.randint(min_products, max_products + 1)  # Random number of products sold each day
-    for _ in range(num_products):
-        product_name = f"Produs_{np.random.randint(1, 21)}"  # Simulating 20 different products
-        price = max(1, np.random.normal(average_price, std_dev_price))  # Normal distribution for prices
-        quantity = np.random.randint(min_quantity, max_quantity + 1)  # Uniform distribution for quantities
-        is_promotion = np.random.rand() < promotion_probability  # 30% chance of promotion
+zile = []
+produse_vandute = []
+preturi = []
+cantitati = []
+total_vanzari = []
+profituri = []
 
-        if is_promotion:
-            price *= (1 - promotion_discount)  # Apply 20% discount for promotions
+for zi in range(num_days):
 
-        total_sales = price * quantity
-        profit = total_sales * profit_margin  # Profit margin of 30%
+    numar_produs = np.random.randint(produs_min, produs_max + 1)
+    produse_vandute.append(numar_produs)
 
-        data.append([day, product_name, price, quantity, total_sales, profit])
+    zi_promo = np.random.rand() < probabilitate_promotie
+    pret_per_produs = np.random.normal(pret_medie, deviatie_standard)
+    if zi_promo:
+        pret_per_produs *= (1 - reducere_promotie)
+    preturi.append(pret_per_produs)
 
-# Create a DataFrame
-columns = ["Zi", "Produs", "Pret", "Cantitate", "Total Vanzari", "Profit"]
-df_sales = pd.DataFrame(data, columns=columns)
 
-# 7. General statistics for dataset
-mean_price = df_sales["Pret"].mean()
-max_price = df_sales["Pret"].max()
-min_price = df_sales["Pret"].min()
+    cantitate_per_produs = np.random.randint(cantitate_min, cantitate_max + 1, numar_produs)
+    cantitati.append(cantitate_per_produs)
 
-mean_quantity = df_sales["Cantitate"].mean()
-max_quantity = df_sales["Cantitate"].max()
-min_quantity = df_sales["Cantitate"].min()
+    total_per_zi = np.sum(pret_per_produs * cantitate_per_produs)
+    total_vanzari.append(total_per_zi)
 
-mean_profit = df_sales["Profit"].mean()
-max_profit = df_sales["Profit"].max()
-min_profit = df_sales["Profit"].min()
+    profit_per_zi = total_per_zi * marja_profit
+    profituri.append(profit_per_zi)
 
-# 8. Total sales and total profit for the 60-day period
-total_sales = df_sales["Total Vanzari"].sum()
-total_profit = df_sales["Profit"].sum()
+    zile.append(zi + 1)
 
-# Print statistics
+df = pd.DataFrame({
+    'Zi': zile,
+    'Produse_vandute': produse_vandute,
+    'Pret_unitar': preturi,
+    'Cantitati_vandute': cantitati,
+    'Total_vanzari': total_vanzari,
+    'Profit': profituri
+})
+
+media_preturi = np.mean(preturi)
+max_pret = np.max(preturi)
+min_pret = np.min(preturi)
+
+media_cantitati = np.mean([np.sum(cantitati_per_produs) for cantitati_per_produs in cantitati])
+max_cantitate = np.max([np.sum(cantitati_per_produs) for cantitati_per_produs in cantitati])
+min_cantitate = np.min([np.sum(cantitati_per_produs) for cantitati_per_produs in cantitati])
+
+media_profit = np.mean(profituri)
+max_profit = np.max(profituri)
+min_profit = np.min(profituri)
+
+total_vanzari_totale = np.sum(total_vanzari)
+profit_total = np.sum(profituri)
+
 print("Statistici generale:")
-print(f"Media prețurilor: {mean_price:.2f}, Maxim preț: {max_price:.2f}, Minim preț: {min_price:.2f}")
-print(f"Media cantităților: {mean_quantity:.2f}, Maxim cantitate: {max_quantity}, Minim cantitate: {min_quantity}")
-print(f"Media profitului: {mean_profit:.2f}, Maxim profit: {max_profit:.2f}, Minim profit: {min_profit:.2f}")
-print(f"Total vânzări: {total_sales:.2f}, Profit total: {total_profit:.2f}")
+print(f"Media preturilor: {media_preturi:.2f}")
+print(f"Maxim pret: {max_pret:.2f}, Min pret: {min_pret:.2f}")
+print(f"Media cantităților vândute: {media_cantitati:.2f}")
+print(f"Maxim cantitate vândută: {max_cantitate}, Min cantitate vândută: {min_cantitate}")
+print(f"Media profitului: {media_profit:.2f}")
+print(f"Maxim profit: {max_profit:.2f}, Min profit: {min_profit:.2f}")
+print(f"Total vânzări pe întreaga perioadă: {total_vanzari_totale:.2f}")
+print(f"Profit total pe întreaga perioadă: {profit_total:.2f}")
 
-# Display first few rows of the dataset
-print("\nDataset generat (primele 10 rânduri):")
-print(df_sales.head(10))
+print("\nPrimele 5 zile din dataset:")
+print(df.head())
